@@ -186,7 +186,7 @@
 
 .cb-chat-input {
   flex: 1;
-  max-width: 610px;
+  max-width: 600px;
   padding: 12px 60px 12px 20px;  /* Added right padding for button space */
   border: 1px solid #ddd;
   border-radius: 25px;
@@ -200,7 +200,7 @@
 
 .cb-send-btn {
   position: absolute;
-  right: 28px;           /* Position from right */
+  right: 100px;           /* Position from right */
   top: 50%;              /* Center vertically */
   transform: translateY(-50%);  /* Perfect vertical center */
   margin-left: 0;        /* Remove margin */
@@ -218,6 +218,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.cb-send-btn svg {
+  transform: rotate(0deg);  /* Add this if you want to adjust rotation */
 }
 
 .cb-send-btn:hover:not(:disabled) {
