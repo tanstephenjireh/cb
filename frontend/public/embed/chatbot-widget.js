@@ -31,7 +31,7 @@
           </div>
           <div class="cb-chat-messages" id="cb-chat-messages"></div>
           <form class="cb-chat-input-form" id="cb-chat-form">
-            <input type="text" class="cb-chat-input" id="cb-chat-input" placeholder="Type your message..." />
+            <input type="text" class="cb-chat-input" id="cb-chat-input" placeholder="Ask me anything..." />
             <button type="submit" class="cb-send-btn" id="cb-send-btn">➤</button>
           </form>
         </div>

@@ -106,7 +106,7 @@
   border-radius: 18px;
   max-width: 65%;
   word-wrap: break-word;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.4;
 }
 
@@ -177,18 +177,21 @@
 
 .cb-chat-input-form {
   display: flex;
-  padding: 12px;
-  background: white;
-  border-top: 1px solid #e0e0e0;
+  padding: 30px;
+  background: #f5f5f5;
+  border-top: none;
+  position: relative;  /* Add this */
+  justify-content: center;  /* Add this line */
 }
 
 .cb-chat-input {
   flex: 1;
-  padding: 10px 14px;
+  max-width: 610px;
+  padding: 12px 60px 12px 20px;  /* Added right padding for button space */
   border: 1px solid #ddd;
-  border-radius: 20px;
+  border-radius: 25px;
   outline: none;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .cb-chat-input:focus {
@@ -196,17 +199,21 @@
 }
 
 .cb-send-btn {
-  margin-left: 8px;
-  padding: 12px;
-  width: 44px;
-  height: 44px;
+  position: absolute;
+  right: 28px;           /* Position from right */
+  top: 50%;              /* Center vertically */
+  transform: translateY(-50%);  /* Perfect vertical center */
+  margin-left: 0;        /* Remove margin */
+  padding: 10px;
+  width: 40px;
+  height: 40px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 50%;
   cursor: pointer;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 18px;
   transition: opacity 0.3s ease;
   display: flex;
   align-items: center;
