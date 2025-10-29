@@ -68,7 +68,7 @@
   background: transparent;
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 15px;
   cursor: pointer;
   padding: 0;
   width: 30px;
@@ -182,7 +182,7 @@
 
 .cb-chat-input-form {
   display: flex;
-  padding: 30px;
+  padding: 20px;
   background: linear-gradient(180deg, #f8f9fc 0%, #eef0f5 100%);  /* Match chat area */
   border-top: none;
   position: relative;
@@ -211,13 +211,13 @@
 
 .cb-send-btn {
   position: absolute;
-  right: 100px;           /* Position from right */
+  right: 110px;           /* Position from right */
   top: 50%;              /* Center vertically */
   transform: translateY(-50%);  /* Perfect vertical center */
   margin-left: 0;        /* Remove margin */
   padding: 10px;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   background: linear-gradient(135deg, #013220 0%, #005a3c 100%);
   color: white;
   border: none;
