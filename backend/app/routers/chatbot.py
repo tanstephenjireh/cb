@@ -1,27 +1,25 @@
+## chatbot.py
+
 import re
 from typing import Dict, List
 import random
+from app.utils.sem_router import semanticrouter
 
-class RuleBasedChatbot:
+class Chatbot:
     def __init__(self):
         self.patterns: List[Dict] = [
             {
-                "patterns": ["hello", "hi", "hey", "greetings"],
+                "patterns": ["chitchat"],
                 "responses": [
                     "Hello! How can I help you today?",
                     "Hi there! What can I do for you?",
-                    "Hey! How may I assist you?"
+                    "Hey! How may I assist you?",
+                    "Whats up! I'm doing great, thank you for asking! How can I help you?",
+                    "Hey! I'm good! What can I assist you with today?"
                 ]
             },
             {
-                "patterns": ["how are you", "how's it going", "what's up"],
-                "responses": [
-                    "I'm doing great, thank you for asking! How can I help you?",
-                    "I'm good! What can I assist you with today?"
-                ]
-            },
-            {
-                "patterns": ["bye", "goodbye", "see you", "see ya"],
+                "patterns": ["goodbye_message"],
                 "responses": [
                     "Goodbye! Have a great day!",
                     "See you later! Feel free to come back anytime!",
@@ -29,7 +27,7 @@ class RuleBasedChatbot:
                 ]
             },
             {
-                "patterns": ["thank", "thanks", "appreciate"],
+                "patterns": ["gratitude"],
                 "responses": [
                     "You're welcome!",
                     "Happy to help!",
@@ -37,17 +35,17 @@ class RuleBasedChatbot:
                 ]
             },
             {
+                "patterns": ["identity"],
+                "responses": [
+                    "I'm a chatbot assistant here to help you!",
+                    "I'm your friendly chatbot. How can I assist you today?"
+                ]
+            },
+            {
                 "patterns": ["help", "support", "assist"],
                 "responses": [
                     "I'm here to help! You can ask me questions and I'll do my best to assist you.",
                     "Sure! What do you need help with?"
-                ]
-            },
-            {
-                "patterns": ["your name", "who are you", "what are you"],
-                "responses": [
-                    "I'm a chatbot assistant here to help you!",
-                    "I'm your friendly chatbot. How can I assist you today?"
                 ]
             },
             {
@@ -72,6 +70,8 @@ class RuleBasedChatbot:
             "I'm still learning. Could you ask that differently?",
             "Hmm, I don't have an answer for that yet. Try asking something else!"
         ]
+
+        self.semantic_router = semanticrouter()
     
     def get_response(self, user_message: str) -> str:
         """
@@ -79,10 +79,14 @@ class RuleBasedChatbot:
         """
         user_message = user_message.lower().strip()
         
+        route = self.semantic_router.router(user_message)
+
+        # return str(route.name)
+
         # Check each pattern
         for pattern_group in self.patterns:
             for pattern in pattern_group["patterns"]:
-                if re.search(r'\b' + pattern + r'\b', user_message):
+                if re.search(r'\b' + pattern + r'\b', str(route.name)):
                     return random.choice(pattern_group["responses"])
         
         # If no pattern matches, return default response

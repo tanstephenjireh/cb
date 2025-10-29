@@ -1,8 +1,12 @@
+## main.py
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from app.chatbot import RuleBasedChatbot
+from app.routers.chatbot import Chatbot
 from datetime import datetime
+from app.models.chat import (
+    ChatMessage, ChatResponse
+)
 
 app = FastAPI(title="Chatbot API")
 
@@ -17,14 +21,7 @@ app.add_middleware(
 )
 
 # Initialize chatbot
-chatbot = RuleBasedChatbot()
-
-class ChatMessage(BaseModel):
-    message: str
-
-class ChatResponse(BaseModel):
-    response: str
-    timestamp: str
+chatbot = Chatbot()
 
 @app.get("/")
 async def root():

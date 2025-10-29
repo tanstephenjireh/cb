@@ -49,7 +49,7 @@
     attachEventListeners();
 
     // Add welcome message
-    addMessage('Hello! How can I help you today?', 'bot');
+    addMessage('👋 Hi there! Welcome to Cars PH', 'bot');
   }
 
   function attachEventListeners() {
