@@ -48,8 +48,8 @@
     // Attach event listeners
     attachEventListeners();
 
-    // Add welcome message
-    addMessage('👋 Hi there! Welcome to Cars PH', 'bot');
+    // Add welcome message with buttons
+    addMessage('👋 Hi there! Welcome to Cars PH', 'bot', true);
   }
 
   function attachEventListeners() {
@@ -81,13 +81,21 @@
     }
   }
 
-  function addMessage(text, sender) {
+  function addMessage(text, sender, showButtons = false) {
     const messagesContainer = document.getElementById('cb-chat-messages');
     const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     
-    // Determine name and avatar based on sender
     const name = sender === 'bot' ? 'ChatDPT' : 'You';
     const avatar = sender === 'bot' ? '🤖' : '👤';
+    
+    // Add buttons HTML if showButtons is true
+    const buttonsHTML = showButtons ? `
+      <div class="cb-quick-replies">
+        <button class="cb-quick-reply-btn" data-message="List of Cars">List of Cars</button>
+        <button class="cb-quick-reply-btn" data-message="Schedule Appointment">Schedule Appointment</button>
+        <button class="cb-quick-reply-btn" data-message="Address">Address</button>
+      </div>
+    ` : '';
     
     const messageHTML = `
       <div class="cb-message cb-${sender}-message">
@@ -97,11 +105,76 @@
         </div>
         <div class="cb-message-content">${escapeHtml(text)}</div>
         <div class="cb-message-timestamp">${timestamp}</div>
+        ${buttonsHTML}
       </div>
     `;
     
     messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+    
+    // Add click handlers to buttons if they exist
+    if (showButtons) {
+      attachQuickReplyHandlers();
+    }
+    
     scrollToBottom();
+  }
+
+  function attachQuickReplyHandlers() {
+    const buttons = document.querySelectorAll('.cb-quick-reply-btn');
+    buttons.forEach(button => {
+      button.addEventListener('click', function() {
+        const message = this.getAttribute('data-message');
+        
+        // Add as user message
+        addMessage(message, 'user');
+        
+        // Remove all quick reply buttons
+        document.querySelectorAll('.cb-quick-replies').forEach(btn => btn.remove());
+        
+        // Send to backend
+        sendMessageToBot(message);
+      });
+    });
+  }
+
+  async function sendMessageToBot(message) {
+    const input = document.getElementById('cb-chat-input');
+    const sendBtn = document.getElementById('cb-send-btn');
+    
+    // Disable input
+    isLoading = true;
+    input.disabled = true;
+    sendBtn.disabled = true;
+    
+    // Show typing indicator
+    showTypingIndicator();
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      
+      const data = await response.json();
+      hideTypingIndicator();
+      addMessage(data.response, 'bot');
+    } catch (error) {
+      console.error('Error:', error);
+      hideTypingIndicator();
+      addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+    } finally {
+      isLoading = false;
+      input.disabled = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
   }
 
   function showTypingIndicator() {
@@ -139,40 +212,8 @@
     addMessage(message, 'user');
     input.value = '';
     
-    // Disable input
-    isLoading = true;
-    input.disabled = true;
-    sendBtn.disabled = true;
-    
-    // Show typing indicator
-    showTypingIndicator();
-    
-    try {
-      const response = await fetch(`${API_BASE_URL}/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      
-      const data = await response.json();
-      hideTypingIndicator();
-      addMessage(data.response, 'bot');
-    } catch (error) {
-      console.error('Error:', error);
-      hideTypingIndicator();
-      addMessage('Sorry, I encountered an error. Please try again.', 'bot');
-    } finally {
-      isLoading = false;
-      input.disabled = false;
-      sendBtn.disabled = false;
-      input.focus();
-    }
+    // Send to bot
+    await sendMessageToBot(message);
   }
 
   function scrollToBottom() {

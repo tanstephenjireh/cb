@@ -79,6 +79,7 @@ class Chatbot:
         """
         user_message = user_message.lower().strip()
         
+        # 1. Route messages with semantic router
         route = self.semantic_router.router(user_message)
 
         # return str(route.name)
